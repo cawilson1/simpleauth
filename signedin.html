@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Signed In Page</title>
+  </head>
+  <body>
+    <style>
+      .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        border-radius: 10px;
+        width: 60vw;
+        height: 20vw;
+        background-color: beige;
+        margin: 25px;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+      }
+
+      .cardEl {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        padding: 2px 16px;
+      }
+
+      .mainEl {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+    Signed In!
+    <div id="render" class="mainEl"></div>
+    <script>
+      console.log(document.cookie);
+      const cookieArr = document.cookie.split("=");
+      async function getData() {
+        const response = await fetch("http://localhost:3000/posts", {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + cookieArr[1]
+          }
+        });
+        const blogPosts = await response.json();
+        console.log(blogPosts);
+        for (let i = 0; i < blogPosts.length; i++) {
+          document.getElementById("render").innerHTML += `
+          <div class="card">
+            <div id='usernameDiv${i}' class="cardEl">${blogPosts[i].username}<div>
+            <h2 id='titleDiv${i}' class="cardEl" onclick="someFunction('${blogPosts[i].title}')">${blogPosts[i].title}</h2>
+          </div>
+        `;
+        }
+      }
+      getData();
+
+      function someFunction(arg) {
+        //put
+        console.log(arg);
+      }
+    </script>
+  </body>
+</html>

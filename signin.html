@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>User Sign in</title>
+  </head>
+  <body>
+    <label>Username:</label>
+    <input id="username" /><br />
+    <label>Password</label>
+    <input id="password" /><br />
+    <button onclick="login()">Log In</button>
+
+    <script>
+      async function login() {
+        const un = document.getElementById("username").value;
+        const pw = document.getElementById("password").value;
+        try {
+          const response = await fetch("http://localhost:3000/users/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              username: un,
+              password: pw
+            })
+          });
+          console.log(response);
+          if (response.redirected === true) {
+            window.location = response.url;
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    </script>
+  </body>
+</html>
